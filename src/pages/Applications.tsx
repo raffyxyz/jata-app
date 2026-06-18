@@ -3,13 +3,14 @@ import {
   Search,
   SlidersHorizontal,
   ExternalLink,
+  Plus,
 } from "lucide-react";
 import {
   mockApplications,
   statusColors,
   statusLabels,
 } from "../data/mock";
-import type { ApplicationStatus } from "../types";
+import type { ApplicationStatus, Page } from "../types";
 
 const statusFilters: (ApplicationStatus | "all")[] = [
   "all",
@@ -21,7 +22,11 @@ const statusFilters: (ApplicationStatus | "all")[] = [
   "withdrawn",
 ];
 
-export function Applications() {
+interface ApplicationsProps {
+  onNavigate: (page: Page) => void;
+}
+
+export function Applications({ onNavigate }: ApplicationsProps) {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | "all">(
     "all"
@@ -44,6 +49,10 @@ export function Applications() {
             Track and manage all your job applications.
           </p>
         </div>
+        <button className="btn-primary" onClick={() => onNavigate("new-application")}>
+          <Plus size={16} strokeWidth={2.5} />
+          New Application
+        </button>
       </div>
 
       <div className="applications-toolbar">

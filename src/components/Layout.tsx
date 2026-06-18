@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { Sidebar } from "./Sidebar";
-import { Titlebar } from "./Titlebar";
-import { ResizeHandles } from "./ResizeHandles";
 import type { Page } from "../types";
 import type { ReactNode } from "react";
 
@@ -27,8 +25,6 @@ export function Layout({ activePage, onNavigate, children }: LayoutProps) {
 
   return (
     <div className="app-container">
-      <ResizeHandles />
-      <Titlebar />
       <div className="app-layout">
         <Sidebar
           activePage={activePage}

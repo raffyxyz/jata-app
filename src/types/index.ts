@@ -64,4 +64,4 @@ export interface DashboardStats {
   rejected: number;
 }
 
-export type Page = "dashboard" | "applications" | "resume" | "documents" | "settings";
+export type Page = "dashboard" | "applications" | "resume" | "documents" | "settings" | "new-application";

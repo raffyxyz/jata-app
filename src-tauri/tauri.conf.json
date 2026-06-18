@@ -12,10 +12,10 @@
   "app": {
     "windows": [
       {
-        "title": "jata-app",
+        "title": "JATA",
         "width": 800,
         "height": 600,
-        "decorations": false
+        "decorations": true
       }
     ],
     "security": {

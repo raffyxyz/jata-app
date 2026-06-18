@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Layout } from "./components/Layout";
 import { Dashboard } from "./pages/Dashboard";
 import { Applications } from "./pages/Applications";
+import { NewApplication } from "./pages/NewApplication";
 import { Resume } from "./pages/Resume";
 import { Documents } from "./pages/Documents";
 import { Settings } from "./pages/Settings";
@@ -15,7 +16,9 @@ function App() {
       case "dashboard":
         return <Dashboard />;
       case "applications":
-        return <Applications />;
+        return <Applications onNavigate={setActivePage} />;
+      case "new-application":
+        return <NewApplication onNavigate={setActivePage} />;
       case "resume":
         return <Resume />;
       case "documents":
