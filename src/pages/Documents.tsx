@@ -1,22 +1,22 @@
 import { useState } from "react";
 import {
-  FileText,
-  Send,
-  FileCheck,
-  Notebook,
-  DollarSign,
-  Sparkles,
-  ArrowUpRight,
-} from "lucide-react";
+  IconFileText,
+  IconSend,
+  IconFileCheck,
+  IconNotebook,
+  IconCurrencyDollar,
+  IconSparkles,
+  IconArrowUpRight,
+} from "@tabler/icons-react";
 import { mockDocuments, documentTypeLabels } from "../data/mock";
 import type { DocumentType } from "../types";
 
 const typeIcons: Record<string, React.ReactNode> = {
-  "cover-letter": <FileText size={18} />,
-  "follow-up": <Send size={18} />,
-  "resume-tips": <FileCheck size={18} />,
-  "interview-prep": <Notebook size={18} />,
-  "salary-negotiation": <DollarSign size={18} />,
+  "cover-letter": <IconFileText size={18} />,
+  "follow-up": <IconSend size={18} />,
+  "resume-tips": <IconFileCheck size={18} />,
+  "interview-prep": <IconNotebook size={18} />,
+  "salary-negotiation": <IconCurrencyDollar size={18} />,
 };
 
 const typeFilters: (DocumentType | "all")[] = [
@@ -46,7 +46,7 @@ export function Documents() {
           </p>
         </div>
         <button className="btn-primary">
-          <Sparkles size={16} />
+          <IconSparkles size={16} />
           Generate New
         </button>
       </div>
@@ -103,7 +103,7 @@ export function Documents() {
                     {documentTypeLabels[doc.type]}
                   </span>
                 </div>
-                <ArrowUpRight size={16} className="document-card-link" />
+                <IconArrowUpRight size={16} className="document-card-link" />
               </div>
               <p className="document-card-desc">{doc.content}</p>
               <div className="document-card-footer">
@@ -118,7 +118,7 @@ export function Documents() {
                   </span>
                 </div>
                 <span className="document-ai-badge">
-                  <Sparkles size={12} />
+                  <IconSparkles size={12} />
                   AI
                 </span>
               </div>

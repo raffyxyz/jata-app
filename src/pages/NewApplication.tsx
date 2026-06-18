@@ -1,31 +1,32 @@
 import { useState } from "react";
 import {
-  ArrowLeft,
-  Sparkles,
-  FileText,
-  Send,
-  Notebook,
-  Check,
-  ChevronRight,
-  Upload,
-  Brain,
-  Target,
-  BookOpen,
-  AlertCircle,
-  Link,
-} from "lucide-react";
+  IconArrowLeft,
+  IconSparkles,
+  IconFileText,
+  IconSend,
+  IconNotebook,
+  IconCheck,
+  IconChevronRight,
+  IconUpload,
+  IconBrain,
+  IconTargetArrow,
+  IconBook,
+  IconAlertCircle,
+  IconLink,
+} from "@tabler/icons-react";
 import type { Page, ApplicationStatus } from "../types";
 import { saveApplication } from "../db";
+import { notify } from "../notification";
 
 interface NewApplicationProps {
   onNavigate: (page: Page) => void;
 }
 
 const steps = [
-  { id: 1, label: "Job Post", icon: Upload },
-  { id: 2, label: "ATS Score", icon: Target },
-  { id: 3, label: "Documents", icon: FileText },
-  { id: 4, label: "Review", icon: Check },
+  { id: 1, label: "Job Post", icon: IconUpload },
+  { id: 2, label: "ATS Score", icon: IconTargetArrow },
+  { id: 3, label: "Documents", icon: IconFileText },
+  { id: 4, label: "Review", icon: IconCheck },
 ];
 
 const mockAnalysis = {
@@ -57,7 +58,7 @@ const mockDocuments = [
   {
     id: "cover-letter",
     label: "Cover Letter",
-    icon: FileText,
+    icon: IconFileText,
     description: "Tailored cover letter highlighting your relevant experience",
     color: "#78716C",
     content: `Dear Hiring Manager,
@@ -76,7 +77,7 @@ Alex Chen`,
   {
     id: "follow-up",
     label: "Follow-Up Email",
-    icon: Send,
+    icon: IconSend,
     description: "Professional follow-up to send after application submission",
     color: "#D97706",
     content: `Subject: Following Up on Senior Frontend Engineer Application
@@ -97,7 +98,7 @@ Alex Chen`,
   {
     id: "interview-prep",
     label: "Interview Prep",
-    icon: Notebook,
+    icon: IconNotebook,
     description: "AI-generated preparation guide with likely topics",
     color: "#22C55E",
     content: `Interview Preparation Guide — Stripe Senior Frontend Engineer
@@ -176,6 +177,7 @@ export function NewApplication({ onNavigate }: NewApplicationProps) {
         notes: notes || undefined,
         jobUrl: jobUrl || undefined,
       });
+      await notify("Application Added", `${company} — ${position}`);
       onNavigate("applications");
     } finally {
       setSaving(false);
@@ -195,7 +197,7 @@ export function NewApplication({ onNavigate }: NewApplicationProps) {
       <div className="page-header">
         <div className="page-header-left">
           <button className="icon-button" onClick={handleBack}>
-            <ArrowLeft size={18} strokeWidth={1.5} />
+            <IconArrowLeft size={18} strokeWidth={1.5} />
           </button>
           <div>
             <h1 className="page-title">New Application</h1>
@@ -205,7 +207,7 @@ export function NewApplication({ onNavigate }: NewApplicationProps) {
           </div>
         </div>
         <div className="ai-toggle-header">
-          <Sparkles size={14} strokeWidth={1.5} className="ai-toggle-header-icon" />
+          <IconSparkles size={14} strokeWidth={1.5} className="ai-toggle-header-icon" />
           <span className="ai-toggle-header-label">AI Assistant</span>
           <button
             className={`toggle-switch compact ${aiEnabled ? "active" : ""}`}
@@ -236,7 +238,7 @@ export function NewApplication({ onNavigate }: NewApplicationProps) {
                 <div className="wizard-step-indicator">
                   <div className="wizard-step-circle">
                     {isPast ? (
-                      <Check size={14} strokeWidth={2.5} />
+                      <IconCheck size={14} strokeWidth={2.5} />
                     ) : (
                       <StepIcon size={14} strokeWidth={1.5} />
                     )}
@@ -288,7 +290,7 @@ export function NewApplication({ onNavigate }: NewApplicationProps) {
               <div className="form-group">
                 <label className="form-label">Job URL (optional)</label>
                 <div className="input-with-icon">
-                  <Link size={14} strokeWidth={1.5} className="input-icon" />
+                  <IconLink size={14} strokeWidth={1.5} className="input-icon" />
                   <input
                     type="url"
                     className="form-input has-icon"
@@ -351,7 +353,7 @@ export function NewApplication({ onNavigate }: NewApplicationProps) {
             </div>
             <div className="card-section-footer">
               <button type="submit" className="btn-primary" disabled={saving}>
-                <Check size={16} strokeWidth={2.5} />
+                <IconCheck size={16} strokeWidth={2.5} />
                 {saving ? "Saving..." : "Save Application"}
               </button>
             </div>
@@ -363,7 +365,7 @@ export function NewApplication({ onNavigate }: NewApplicationProps) {
             <div className="card-section">
               <div className="card-section-header">
                 <div className="card-section-header-icon" style={{ background: "#78716C18", color: "#78716C" }}>
-                  <Upload size={18} strokeWidth={1.5} />
+                  <IconUpload size={18} strokeWidth={1.5} />
                 </div>
                 <div>
                   <h3 className="card-section-title">Paste Job Description</h3>
@@ -377,7 +379,7 @@ export function NewApplication({ onNavigate }: NewApplicationProps) {
                 <div className="form-group">
                   <label className="form-label">Job URL (optional)</label>
                   <div className="input-with-icon">
-                    <Link size={14} strokeWidth={1.5} className="input-icon" />
+                    <IconLink size={14} strokeWidth={1.5} className="input-icon" />
                     <input
                       type="url"
                       className="form-input has-icon"
@@ -428,7 +430,7 @@ Nice to have:
                     <>Analyzing...</>
                   ) : (
                     <>
-                      <Brain size={16} strokeWidth={2.5} />
+                      <IconBrain size={16} strokeWidth={2.5} />
                       Analyze with AI
                     </>
                   )}
@@ -441,7 +443,7 @@ Nice to have:
             <div className="card-section">
               <div className="card-section-header">
                 <div className="card-section-header-icon" style={{ background: "#22C55E18", color: "#22C55E" }}>
-                  <Target size={18} strokeWidth={1.5} />
+                  <IconTargetArrow size={18} strokeWidth={1.5} />
                 </div>
                 <div>
                   <h3 className="card-section-title">ATS Score Analysis</h3>
@@ -502,7 +504,7 @@ Nice to have:
                     </text>
                   </svg>
                   <div className="ats-score-badge good-match">
-                    <Check size={12} strokeWidth={3} />
+                    <IconCheck size={12} strokeWidth={3} />
                     Good Match
                   </div>
                 </div>
@@ -539,7 +541,7 @@ Nice to have:
               <div className="ats-details-grid">
                 <div className="ats-detail-card">
                   <div className="ats-detail-header">
-                    <Check size={14} strokeWidth={2.5} style={{ color: "#22C55E" }} />
+                    <IconCheck size={14} strokeWidth={2.5} style={{ color: "#22C55E" }} />
                     <span>Matched Skills</span>
                   </div>
                   <div className="ats-tags">
@@ -552,7 +554,7 @@ Nice to have:
                 </div>
                 <div className="ats-detail-card">
                   <div className="ats-detail-header">
-                    <AlertCircle size={14} strokeWidth={2.5} style={{ color: "#D97706" }} />
+                    <IconAlertCircle size={14} strokeWidth={2.5} style={{ color: "#D97706" }} />
                     <span>Missing Skills</span>
                   </div>
                   <div className="ats-tags">
@@ -567,7 +569,7 @@ Nice to have:
 
               <div className="ats-tips">
                 <div className="ats-tips-header">
-                  <BookOpen size={14} strokeWidth={1.5} />
+                  <IconBook size={14} strokeWidth={1.5} />
                   Tips to Improve Your Score
                 </div>
                 <ul className="ats-tips-list">
@@ -583,7 +585,7 @@ Nice to have:
                   onClick={() => setStep(3)}
                 >
                   Continue to Documents
-                  <ChevronRight size={16} strokeWidth={2.5} />
+                  <IconChevronRight size={16} strokeWidth={2.5} />
                 </button>
               </div>
             </div>
@@ -593,7 +595,7 @@ Nice to have:
             <div className="card-section">
               <div className="card-section-header">
                 <div className="card-section-header-icon" style={{ background: "#D9770618", color: "#D97706" }}>
-                  <FileText size={18} strokeWidth={1.5} />
+                  <IconFileText size={18} strokeWidth={1.5} />
                 </div>
                 <div>
                   <h3 className="card-section-title">Generate Documents</h3>
@@ -627,7 +629,7 @@ Nice to have:
                       </div>
                       {docType === doc.id && (
                         <div className="doc-type-check">
-                          <Check size={14} strokeWidth={2.5} />
+                      <IconCheck size={14} strokeWidth={2.5} />
                         </div>
                       )}
                     </button>
@@ -646,7 +648,7 @@ Nice to have:
                     <>Generating...</>
                   ) : (
                     <>
-                      <Sparkles size={16} strokeWidth={2.5} />
+                      <IconSparkles size={16} strokeWidth={2.5} />
                       {showDoc ? "Regenerate" : `Generate ${selectedDoc?.label}`}
                     </>
                   )}
@@ -656,7 +658,7 @@ Nice to have:
                   <div className="doc-preview">
                     <div className="doc-preview-header">
                       <div className="doc-preview-title">
-                        <FileText size={14} strokeWidth={1.5} />
+                        <IconFileText size={14} strokeWidth={1.5} />
                         {selectedDoc.label}
                       </div>
                       <span className="doc-preview-badge">AI Generated</span>
@@ -682,7 +684,7 @@ Nice to have:
                   onClick={() => setStep(4)}
                 >
                   Continue to Review
-                  <ChevronRight size={16} strokeWidth={2.5} />
+                  <IconChevronRight size={16} strokeWidth={2.5} />
                 </button>
               </div>
             </div>
@@ -692,7 +694,7 @@ Nice to have:
             <div className="card-section">
               <div className="card-section-header">
                 <div className="card-section-header-icon" style={{ background: "#D9770618", color: "#D97706" }}>
-                  <Check size={18} strokeWidth={1.5} />
+                  <IconCheck size={18} strokeWidth={1.5} />
                 </div>
                 <div>
                   <h3 className="card-section-title">Review & Save</h3>
@@ -743,7 +745,7 @@ Nice to have:
                 <div className="form-group">
                   <label className="form-label">Job URL (optional)</label>
                   <div className="input-with-icon">
-                    <Link size={14} strokeWidth={1.5} className="input-icon" />
+                    <IconLink size={14} strokeWidth={1.5} className="input-icon" />
                     <input
                       type="url"
                       className="form-input has-icon"
@@ -813,7 +815,7 @@ Nice to have:
                   Back
                 </button>
                 <button className="btn-primary" onClick={handleSave} disabled={saving}>
-                  <Check size={16} strokeWidth={2.5} />
+                  <IconCheck size={16} strokeWidth={2.5} />
                   {saving ? "Saving..." : "Save Application"}
                 </button>
               </div>

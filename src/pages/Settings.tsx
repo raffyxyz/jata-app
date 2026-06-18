@@ -1,4 +1,4 @@
-import { Sun, Moon, User, Palette, Info } from "lucide-react";
+import { IconSun, IconMoon, IconUser, IconPalette, IconInfoCircle } from "@tabler/icons-react";
 import { useTheme } from "../contexts/ThemeContext";
 
 export function Settings() {
@@ -18,7 +18,7 @@ export function Settings() {
       <div className="settings-sections">
         <div className="settings-section">
           <div className="settings-section-header">
-            <Palette size={16} />
+            <IconPalette size={16} />
             <h2 className="settings-section-title">Appearance</h2>
           </div>
           <div className="settings-card">
@@ -37,8 +37,8 @@ export function Settings() {
                 <span
                   className={`theme-toggle-thumb ${theme}`}
                 />
-                <Sun size={14} className="theme-toggle-icon sun" />
-                <Moon size={14} className="theme-toggle-icon moon" />
+                <IconSun size={14} className="theme-toggle-icon sun" />
+                <IconMoon size={14} className="theme-toggle-icon moon" />
               </button>
             </div>
           </div>
@@ -46,7 +46,7 @@ export function Settings() {
 
         <div className="settings-section">
           <div className="settings-section-header">
-            <User size={16} />
+            <IconUser size={16} />
             <h2 className="settings-section-title">Profile</h2>
           </div>
           <div className="settings-card">
@@ -77,7 +77,7 @@ export function Settings() {
 
         <div className="settings-section">
           <div className="settings-section-header">
-            <Info size={16} />
+            <IconInfoCircle size={16} />
             <h2 className="settings-section-title">About</h2>
           </div>
           <div className="settings-card">

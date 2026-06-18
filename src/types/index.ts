@@ -64,4 +64,13 @@ export interface DashboardStats {
   rejected: number;
 }
 
+export interface ResumeFile {
+  id: string;
+  name: string;
+  data: string;
+  size: number;
+  createdAt: string;
+  filePath: string;
+}
+
 export type Page = "dashboard" | "applications" | "resume" | "documents" | "settings" | "new-application";

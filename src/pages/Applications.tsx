@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
 import {
-  Search,
-  SlidersHorizontal,
-  Plus,
-  MoreVertical,
-  Eye,
-  Pencil,
-  Trash2,
-} from "lucide-react";
+  IconSearch,
+  IconAdjustmentsHorizontal,
+  IconPlus,
+  IconDotsVertical,
+  IconEye,
+  IconPencil,
+  IconTrash,
+} from "@tabler/icons-react";
 import {
   statusColors,
   statusLabels,
 } from "../data/mock";
 import type { ApplicationStatus, Page, JobApplication } from "../types";
 import { getApplications, deleteApplication } from "../db";
+import { notify } from "../notification";
 
 const statusFilters: (ApplicationStatus | "all")[] = [
   "all",
@@ -58,7 +59,11 @@ export function Applications({ onNavigate }: ApplicationsProps) {
   }, [openMenu]);
 
   const handleDelete = async (id: string) => {
+    const app = applications.find((a) => a.id === id);
     await deleteApplication(id);
+    if (app) {
+      await notify("Application Deleted", `${app.company} — ${app.position}`);
+    }
     setApplications((prev) => prev.filter((a) => a.id !== id));
     setDeleteConfirm(null);
   };
@@ -81,14 +86,14 @@ export function Applications({ onNavigate }: ApplicationsProps) {
           </p>
         </div>
         <button className="btn-primary" onClick={() => onNavigate("new-application")}>
-          <Plus size={16} strokeWidth={2.5} />
+          <IconPlus size={16} strokeWidth={2.5} />
           New Application
         </button>
       </div>
 
       <div className="applications-toolbar">
         <div className="search-wrapper">
-          <Search size={16} className="search-icon" />
+          <IconSearch size={16} className="search-icon" />
           <input
             type="text"
             className="search-input"
@@ -98,7 +103,7 @@ export function Applications({ onNavigate }: ApplicationsProps) {
           />
         </div>
         <button className="filter-button">
-          <SlidersHorizontal size={16} />
+          <IconAdjustmentsHorizontal size={16} />
           Filters
         </button>
       </div>
@@ -185,7 +190,7 @@ export function Applications({ onNavigate }: ApplicationsProps) {
                           setOpenMenu(openMenu === app.id ? null : app.id)
                         }
                       >
-                        <MoreVertical size={14} />
+                        <IconDotsVertical size={14} />
                       </button>
                       {openMenu === app.id && (
                         <div className="action-dropdown">
@@ -193,14 +198,14 @@ export function Applications({ onNavigate }: ApplicationsProps) {
                             className="action-dropdown-item"
                             onClick={() => setOpenMenu(null)}
                           >
-                            <Eye size={14} />
+                            <IconEye size={14} />
                             View
                           </button>
                           <button
                             className="action-dropdown-item"
                             onClick={() => setOpenMenu(null)}
                           >
-                            <Pencil size={14} />
+                            <IconPencil size={14} />
                             Edit
                           </button>
                           <div className="action-dropdown-divider" />
@@ -211,7 +216,7 @@ export function Applications({ onNavigate }: ApplicationsProps) {
                               setDeleteConfirm(app.id);
                             }}
                           >
-                            <Trash2 size={14} />
+                            <IconTrash size={14} />
                             Delete
                           </button>
                         </div>
@@ -243,7 +248,7 @@ export function Applications({ onNavigate }: ApplicationsProps) {
                 className="btn-danger"
                 onClick={() => handleDelete(deleteConfirm)}
               >
-                <Trash2 size={14} />
+                <IconTrash size={14} />
                 Delete
               </button>
             </div>

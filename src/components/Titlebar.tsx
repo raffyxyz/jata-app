@@ -1,4 +1,4 @@
-import { Minus, Square, X, Briefcase } from "lucide-react";
+import { IconMinus, IconSquare, IconX, IconBriefcase } from "@tabler/icons-react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 
 export function Titlebar() {
@@ -26,7 +26,7 @@ export function Titlebar() {
   return (
     <div className="titlebar" onMouseDown={handleDrag}>
       <div className="titlebar-title">
-        <Briefcase size={12} className="titlebar-logo-icon" />
+        <IconBriefcase size={12} className="titlebar-logo-icon" />
         <span className="titlebar-logo-text">jata</span>
       </div>
       <div className="titlebar-controls" onMouseDown={(e) => e.stopPropagation()}>
@@ -36,7 +36,7 @@ export function Titlebar() {
           title="Minimize"
           aria-label="Minimize"
         >
-          <Minus size={14} />
+          <IconMinus size={14} />
         </button>
         <button
           onClick={handleMaximize}
@@ -44,7 +44,7 @@ export function Titlebar() {
           title="Maximize"
           aria-label="Maximize"
         >
-          <Square size={12} />
+          <IconSquare size={12} />
         </button>
         <button
           onClick={handleClose}
@@ -52,7 +52,7 @@ export function Titlebar() {
           title="Close"
           aria-label="Close"
         >
-          <X size={14} />
+          <IconX size={14} />
         </button>
       </div>
     </div>

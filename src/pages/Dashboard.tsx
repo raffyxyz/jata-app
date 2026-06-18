@@ -1,11 +1,11 @@
 import {
-  Briefcase,
-  CalendarCheck,
-  TrendingUp,
-  XCircle,
-  ArrowRight,
-  ExternalLink,
-} from "lucide-react";
+  IconBriefcase,
+  IconCalendarCheck,
+  IconTrendingUp,
+  IconCircleX,
+  IconArrowRight,
+  IconExternalLink,
+} from "@tabler/icons-react";
 import {
   statusColors,
   statusLabels,
@@ -51,31 +51,31 @@ export function Dashboard() {
     {
       label: "Total Applications",
       value: stats.totalApplications,
-      icon: <Briefcase size={20} />,
+      icon: <IconBriefcase size={20} />,
       color: "#78716C",
     },
     {
       label: "Active",
       value: stats.activeApplications,
-      icon: <TrendingUp size={20} />,
+      icon: <IconTrendingUp size={20} />,
       color: "#D97706",
     },
     {
       label: "Interviews",
       value: stats.interviews,
-      icon: <CalendarCheck size={20} />,
+      icon: <IconCalendarCheck size={20} />,
       color: "#22C55E",
     },
     {
       label: "Offers",
       value: stats.offers,
-      icon: <TrendingUp size={20} />,
+      icon: <IconTrendingUp size={20} />,
       color: "#22C55E",
     },
     {
       label: "Rejected",
       value: stats.rejected,
-      icon: <XCircle size={20} />,
+      icon: <IconCircleX size={20} />,
       color: "#DC2626",
     },
   ];
@@ -110,7 +110,7 @@ export function Dashboard() {
           <div className="section-header">
             <h2 className="section-title">Recent Applications</h2>
             <button className="section-action">
-              View all <ArrowRight size={14} />
+              View all <IconArrowRight size={14} />
             </button>
           </div>
           <div className="recent-list">
@@ -166,7 +166,7 @@ export function Dashboard() {
                         {app.company}
                       </span>
                     </div>
-                    <ExternalLink size={16} className="interview-card-link" />
+                    <IconExternalLink size={16} className="interview-card-link" />
                   </div>
                   <div className="interview-card-meta">
                     <span className="interview-card-date">
