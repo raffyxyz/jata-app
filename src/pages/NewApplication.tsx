@@ -15,6 +15,7 @@ import {
   Link,
 } from "lucide-react";
 import type { Page, ApplicationStatus } from "../types";
+import { saveApplication } from "../db";
 
 interface NewApplicationProps {
   onNavigate: (page: Page) => void;
@@ -141,6 +142,7 @@ export function NewApplication({ onNavigate }: NewApplicationProps) {
 
   const [analyzing, setAnalyzing] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [showDoc, setShowDoc] = useState(false);
 
   const selectedDoc = mockDocuments.find((d) => d.id === docType);
@@ -162,8 +164,22 @@ export function NewApplication({ onNavigate }: NewApplicationProps) {
     }, 1200);
   };
 
-  const handleSave = () => {
-    onNavigate("applications");
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await saveApplication({
+        company,
+        position,
+        status,
+        location,
+        salary: salary || undefined,
+        notes: notes || undefined,
+        jobUrl: jobUrl || undefined,
+      });
+      onNavigate("applications");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleBack = () => {
@@ -241,9 +257,9 @@ export function NewApplication({ onNavigate }: NewApplicationProps) {
       {!aiEnabled ? (
         <div className="card-section">
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
-              handleSave();
+              await handleSave();
             }}
           >
             <div className="card-section-body">
@@ -334,9 +350,9 @@ export function NewApplication({ onNavigate }: NewApplicationProps) {
               </div>
             </div>
             <div className="card-section-footer">
-              <button type="submit" className="btn-primary">
+              <button type="submit" className="btn-primary" disabled={saving}>
                 <Check size={16} strokeWidth={2.5} />
-                Save Application
+                {saving ? "Saving..." : "Save Application"}
               </button>
             </div>
           </form>
@@ -796,9 +812,9 @@ Nice to have:
                 >
                   Back
                 </button>
-                <button className="btn-primary" onClick={handleSave}>
+                <button className="btn-primary" onClick={handleSave} disabled={saving}>
                   <Check size={16} strokeWidth={2.5} />
-                  Save Application
+                  {saving ? "Saving..." : "Save Application"}
                 </button>
               </div>
             </div>

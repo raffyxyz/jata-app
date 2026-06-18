@@ -7,14 +7,29 @@ import {
   ExternalLink,
 } from "lucide-react";
 import {
-  mockStats,
-  mockApplications,
   statusColors,
   statusLabels,
 } from "../data/mock";
+import type { JobApplication, DashboardStats } from "../types";
+import { useEffect, useState } from "react";
+import { getApplications, getStats } from "../db";
 
 export function Dashboard() {
-  const recentApps = mockApplications
+  const [applications, setApplications] = useState<JobApplication[]>([]);
+  const [stats, setStats] = useState<DashboardStats>({
+    totalApplications: 0,
+    activeApplications: 0,
+    interviews: 0,
+    offers: 0,
+    rejected: 0,
+  });
+
+  useEffect(() => {
+    getApplications().then(setApplications);
+    getStats().then(setStats);
+  }, []);
+
+  const recentApps = applications
     .filter((a) => a.appliedDate)
     .sort(
       (a, b) =>
@@ -22,9 +37,9 @@ export function Dashboard() {
     )
     .slice(0, 5);
 
-  const interviews = mockApplications.filter((a) => a.status === "interview");
+  const interviews = applications.filter((a) => a.status === "interview");
 
-  const statusCounts = mockApplications.reduce(
+  const statusCounts = applications.reduce(
     (acc, app) => {
       acc[app.status] = (acc[app.status] || 0) + 1;
       return acc;
@@ -35,31 +50,31 @@ export function Dashboard() {
   const statCards = [
     {
       label: "Total Applications",
-      value: mockStats.totalApplications,
+      value: stats.totalApplications,
       icon: <Briefcase size={20} />,
       color: "#78716C",
     },
     {
       label: "Active",
-      value: mockStats.activeApplications,
+      value: stats.activeApplications,
       icon: <TrendingUp size={20} />,
       color: "#D97706",
     },
     {
       label: "Interviews",
-      value: mockStats.interviews,
+      value: stats.interviews,
       icon: <CalendarCheck size={20} />,
       color: "#22C55E",
     },
     {
       label: "Offers",
-      value: mockStats.offers,
+      value: stats.offers,
       icon: <TrendingUp size={20} />,
       color: "#22C55E",
     },
     {
       label: "Rejected",
-      value: mockStats.rejected,
+      value: stats.rejected,
       icon: <XCircle size={20} />,
       color: "#DC2626",
     },
@@ -190,7 +205,7 @@ export function Dashboard() {
                 <div
                   className="status-bar-fill"
                   style={{
-                    width: `${(count / mockStats.totalApplications) * 100}%`,
+                    width: `${stats.totalApplications > 0 ? (count / stats.totalApplications) * 100 : 0}%`,
                     backgroundColor: statusColors[status] || "#A8A29E",
                   }}
                 />

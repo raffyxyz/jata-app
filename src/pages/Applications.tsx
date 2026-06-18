@@ -1,16 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Search,
   SlidersHorizontal,
-  ExternalLink,
   Plus,
+  MoreVertical,
+  Eye,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import {
-  mockApplications,
   statusColors,
   statusLabels,
 } from "../data/mock";
-import type { ApplicationStatus, Page } from "../types";
+import type { ApplicationStatus, Page, JobApplication } from "../types";
+import { getApplications, deleteApplication } from "../db";
 
 const statusFilters: (ApplicationStatus | "all")[] = [
   "all",
@@ -31,8 +34,36 @@ export function Applications({ onNavigate }: ApplicationsProps) {
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | "all">(
     "all"
   );
+  const [applications, setApplications] = useState<JobApplication[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
-  const filtered = mockApplications.filter((app) => {
+  useEffect(() => {
+    getApplications()
+      .then(setApplications)
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    if (!openMenu) return;
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest(".action-menu")) {
+        setOpenMenu(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [openMenu]);
+
+  const handleDelete = async (id: string) => {
+    await deleteApplication(id);
+    setApplications((prev) => prev.filter((a) => a.id !== id));
+    setDeleteConfirm(null);
+  };
+
+  const filtered = applications.filter((app) => {
     const matchesSearch =
       app.company.toLowerCase().includes(search.toLowerCase()) ||
       app.position.toLowerCase().includes(search.toLowerCase());
@@ -105,7 +136,13 @@ export function Applications({ onNavigate }: ApplicationsProps) {
             </tr>
           </thead>
           <tbody>
-            {filtered.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan={6} className="table-empty">
+                  Loading...
+                </td>
+              </tr>
+            ) : filtered.length === 0 ? (
               <tr>
                 <td colSpan={6} className="table-empty">
                   No applications found
@@ -140,10 +177,46 @@ export function Applications({ onNavigate }: ApplicationsProps) {
                     {app.appliedDate || "—"}
                   </td>
                   <td className="table-location">{app.location}</td>
-                  <td>
-                    <button className="table-action">
-                      <ExternalLink size={14} />
-                    </button>
+                  <td className="table-action-cell">
+                    <div className="action-menu">
+                      <button
+                        className="table-action"
+                        onClick={() =>
+                          setOpenMenu(openMenu === app.id ? null : app.id)
+                        }
+                      >
+                        <MoreVertical size={14} />
+                      </button>
+                      {openMenu === app.id && (
+                        <div className="action-dropdown">
+                          <button
+                            className="action-dropdown-item"
+                            onClick={() => setOpenMenu(null)}
+                          >
+                            <Eye size={14} />
+                            View
+                          </button>
+                          <button
+                            className="action-dropdown-item"
+                            onClick={() => setOpenMenu(null)}
+                          >
+                            <Pencil size={14} />
+                            Edit
+                          </button>
+                          <div className="action-dropdown-divider" />
+                          <button
+                            className="action-dropdown-item danger"
+                            onClick={() => {
+                              setOpenMenu(null);
+                              setDeleteConfirm(app.id);
+                            }}
+                          >
+                            <Trash2 size={14} />
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))
@@ -151,6 +224,32 @@ export function Applications({ onNavigate }: ApplicationsProps) {
           </tbody>
         </table>
       </div>
+      {deleteConfirm && (
+        <div className="modal-overlay" onClick={() => setDeleteConfirm(null)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h3 className="modal-title">Delete Application</h3>
+            <p className="modal-desc">
+              Are you sure you want to delete this application? This action
+              cannot be undone.
+            </p>
+            <div className="modal-actions">
+              <button
+                className="btn-secondary"
+                onClick={() => setDeleteConfirm(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn-danger"
+                onClick={() => handleDelete(deleteConfirm)}
+              >
+                <Trash2 size={14} />
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
