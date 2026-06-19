@@ -54,6 +54,7 @@ async function fixSchema(database: Database) {
       } catch { }
     }
   }
+
 }
 
 function mapRow(row: Record<string, unknown>): JobApplication {
@@ -123,43 +124,36 @@ export async function deleteApplication(id: string): Promise<void> {
   await database.execute("DELETE FROM applications WHERE id = $1", [id]);
 }
 
-function base64Size(b64: string): number {
-  const comma = b64.indexOf(",");
-  const raw = comma >= 0 ? b64.slice(comma + 1) : b64;
-  const padding = raw.endsWith("==") ? 2 : raw.endsWith("=") ? 1 : 0;
-  return Math.round((raw.length * 3) / 4 - padding);
-}
-
 export async function getResumes(): Promise<ResumeFile[]> {
   const database = await initDb();
   const rows = await database.select<Record<string, unknown>[]>(
-    "SELECT id, name, parsed_text as data, file_url, file_path, created_at FROM resumes WHERE user_id = 'default' ORDER BY created_at DESC"
+    "SELECT id, name, file_url, file_path, created_at, parsed_text FROM resumes WHERE user_id = 'default' ORDER BY created_at DESC"
   );
   return rows.map((row) => {
-    const data = (row.data || "") as string;
     const filePath = (row.file_path || "") as string;
     return {
       id: row.id as string,
       name: (row.name || "Untitled") as string,
-      data,
-      size: filePath ? 0 : (data ? base64Size(data) : 0),
+      data: "",
+      size: 0,
       filePath,
       createdAt: (row.created_at || "") as string,
+      parsedText: (row.parsed_text as string) || undefined,
     };
   });
 }
 
 export async function saveResume(
   name: string,
-  data: string,
-  filePath?: string
+  filePath?: string,
+  parsedText?: string
 ): Promise<string> {
   const database = await initDb();
   const id = crypto.randomUUID();
   await database.execute(
-    `INSERT INTO resumes (id, user_id, name, parsed_text, file_path)
+    `INSERT INTO resumes (id, user_id, name, file_path, parsed_text)
      VALUES ($1, 'default', $2, $3, $4)`,
-    [id, name, data, filePath || null]
+    [id, name, filePath || null, parsedText || null]
   );
   return id;
 }

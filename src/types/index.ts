@@ -71,6 +71,7 @@ export interface ResumeFile {
   size: number;
   createdAt: string;
   filePath: string;
+  parsedText?: string;
 }
 
 export type Page = "dashboard" | "applications" | "resume" | "documents" | "settings" | "new-application";
